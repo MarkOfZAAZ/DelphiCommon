@@ -1,7 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-// Copyright © 1994 - 2025 Aldwicks Limited
-//
-// Last changed: 22.10.2025 17:07
+// Last changed: 23.10.2025 18:01
 // -----------------------------------------------------------------------------
 
 unit Unit37;
@@ -11,8 +9,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls, FMX.TabControl,
-  FMX.Header, FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
-  FMX.ListView, uCommonDialogs, uCommonClassHelpers, uCommonAppversion, uListViewHelper;
+  FMX.Header, FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView,
+  uCommonDialogs, uCommonAppversion, uHelperListView, uHelperTabControl;
 
 type
   TForm37 = class(TForm)
