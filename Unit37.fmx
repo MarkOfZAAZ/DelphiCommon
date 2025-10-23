@@ -2,34 +2,44 @@ object Form37: TForm37
   Left = 0
   Top = 0
   Caption = 'Form37'
-  ClientHeight = 480
+  ClientHeight = 683
   ClientWidth = 640
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Button1: TButton
-    Position.X = 33.000000000000000000
-    Position.Y = 409.000000000000000000
-    TabOrder = 2
-    Text = 'Main Left'
+  object btnLeftSlide: TButton
+    Anchors = [akLeft, akBottom]
+    Position.X = 9.000000000000000000
+    Position.Y = 606.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'Left Slide'
     TextSettings.Trimming = None
-    OnClick = Button1Click
+    OnClick = btnLeftSlideClick
   end
   object TCMain: TTabControl
-    Position.X = 32.000000000000000000
-    Position.Y = 56.000000000000000000
-    Size.Width = 569.000000000000000000
-    Size.Height = 345.000000000000000000
+    Align = Top
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 4.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Margins.Bottom = 4.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 624.000000000000000000
+    Size.Height = 444.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 1
-    TabOrder = 3
+    TabOrder = 5
     TabPosition = PlatformDefault
     Sizes = (
-      569s
-      319s
-      569s
-      319s)
+      624s
+      418s
+      624s
+      418s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
@@ -104,22 +114,92 @@ object Form37: TForm37
       Text = 'TabItem2'
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
+      object ListView1: TListView
+        ItemAppearanceClassName = 'TListItemAppearance'
+        ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+        HeaderAppearanceClassName = 'TListHeaderObjects'
+        FooterAppearanceClassName = 'TListHeaderObjects'
+        Align = Client
+        Margins.Left = 8.000000000000000000
+        Margins.Top = 8.000000000000000000
+        Margins.Right = 8.000000000000000000
+        Margins.Bottom = 8.000000000000000000
+        Size.Width = 608.000000000000000000
+        Size.Height = 402.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+      end
     end
   end
-  object Button2: TButton
-    Position.X = 121.000000000000000000
-    Position.Y = 409.000000000000000000
-    TabOrder = 1
-    Text = 'Main Right'
+  object btnRightSlide: TButton
+    Anchors = [akLeft, akBottom]
+    Position.X = 137.000000000000000000
+    Position.Y = 606.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Right Slide'
     TextSettings.Trimming = None
-    OnClick = Button2Click
+    OnClick = btnRightSlideClick
   end
   object Button3: TButton
-    Position.X = 521.000000000000000000
-    Position.Y = 409.000000000000000000
-    TabOrder = 5
+    Anchors = [akLeft, akBottom]
+    Position.X = 265.000000000000000000
+    Position.Y = 606.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
     Text = 'Message'
     TextSettings.Trimming = None
     OnClick = Button3Click
+  end
+  object btnLeftDirect: TButton
+    Anchors = [akLeft, akBottom]
+    Position.X = 9.000000000000000000
+    Position.Y = 636.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Left Direct'
+    TextSettings.Trimming = None
+    OnClick = btnLeftDirectClick
+  end
+  object btnRightDirect: TButton
+    Anchors = [akLeft, akBottom]
+    Position.X = 137.000000000000000000
+    Position.Y = 636.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'Right Direct'
+    TextSettings.Trimming = None
+    OnClick = btnRightDirectClick
+  end
+  object Panel1: TPanel
+    Align = MostTop
+    Padding.Left = 8.000000000000000000
+    Padding.Top = 4.000000000000000000
+    Padding.Right = 8.000000000000000000
+    Padding.Bottom = 4.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    TabStop = False
+    object lblVersion: TLabel
+      Align = Contents
+      StyledSettings = [Family, Style]
+      Size.Width = 640.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 22.000000000000000000
+      TextSettings.FontColor = claCadetblue
+      Text = 'lblVersion'
+      TabOrder = 7
+    end
   end
 end

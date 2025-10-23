@@ -15,7 +15,8 @@ uses
   uCommonPDF in 'uCommonPDF.pas',
   uCommonSQLLite in 'uCommonSQLLite.pas',
   uCommonMySQL in 'uCommonMySQL.pas',
-  uCommonAppversion in 'uCommonAppversion.pas';
+  uCommonAppversion in 'uCommonAppversion.pas',
+  uListViewHelper in 'uListViewHelper.pas';
 
 {$R *.res}
 

@@ -1,5 +1,5 @@
-// -----------------------------------------------------------------------------
-// Copyright � 1994 - 2025 Aldwicks Limited
+﻿// -----------------------------------------------------------------------------
+// Copyright © 1994 - 2025 Aldwicks Limited
 //
 // Last changed: 22.10.2025 17:07
 // -----------------------------------------------------------------------------
@@ -11,22 +11,31 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Controls.Presentation, FMX.StdCtrls, FMX.TabControl,
-  uCommonClassHelpers, uCommonDialogs;
+  FMX.Header, FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
+  FMX.ListView, uCommonDialogs, uCommonClassHelpers, uCommonAppversion, uListViewHelper;
 
 type
   TForm37 = class(TForm)
-    Button1: TButton;
+    btnLeftSlide: TButton;
     TCMain: TTabControl;
     TabItem1: TTabItem;
     TabItem2: TTabItem;
     TCSecondary: TTabControl;
     TabItem3: TTabItem;
     TabItem4: TTabItem;
-    Button2: TButton;
+    btnRightSlide: TButton;
     Button3: TButton;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    btnLeftDirect: TButton;
+    btnRightDirect: TButton;
+    ListView1: TListView;
+    Panel1: TPanel;
+    lblVersion: TLabel;
+    procedure btnLeftSlideClick(Sender: TObject);
+    procedure btnRightSlideClick(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure btnLeftDirectClick(Sender: TObject);
+    procedure btnRightDirectClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,12 +49,22 @@ implementation
 
 {$R *.fmx}
 
-procedure TForm37.Button1Click(Sender: TObject);
+procedure TForm37.btnLeftDirectClick(Sender: TObject);
+begin
+  TCMain.TabLeft(TabItem1, false);
+end;
+
+procedure TForm37.btnLeftSlideClick(Sender: TObject);
 begin
   TCMain.TabLeft(TabItem1);
 end;
 
-procedure TForm37.Button2Click(Sender: TObject);
+procedure TForm37.btnRightDirectClick(Sender: TObject);
+begin
+  TCMain.TabRight(TabItem2, false);
+end;
+
+procedure TForm37.btnRightSlideClick(Sender: TObject);
 begin
   TCMain.TabRight(TabItem2);
 end;
@@ -53,6 +72,13 @@ end;
 procedure TForm37.Button3Click(Sender: TObject);
 begin
   ShowToast('hello mates');
+end;
+
+procedure TForm37.FormCreate(Sender: TObject);
+begin
+  ListView1.SetSearchDefault;
+  ListView1.SetSearchFontColor(TAlphaColors.Red);
+  lblVersion.Text := Format('Version %s', [GetAppVersion(true)]);
 end;
 
 end.
