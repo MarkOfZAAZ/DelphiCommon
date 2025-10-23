@@ -8,8 +8,15 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Types,
+  FMX.Graphics,
   Data.DB, DBAccess, MyAccess, MemDS,
   uCommonDialogs;
+
+type
+  TBitmapHelper = class helper for TBitmap
+  public
+    procedure FetchImageFromBlobField(AField: TField);
+  end;
 
   function CheckRecordExistsMySQL(const AConnection: TMyConnection; const ATable, AColumn: string; const AValue: Variant): Boolean;
 
@@ -42,7 +49,29 @@ begin
   end;
 end;
 
+{ TBitmapHelper }
 
+(*
+  Example usage:
+  Image1.Bitmap.FetchImageFromBlobField(Query.FieldByName('image_blob'));
+*)
+
+procedure TBitmapHelper.FetchImageFromBlobField(AField: TField);
+var
+  Stream: TMemoryStream;
+begin
+  if Assigned(AField) and (AField is TBlobField) and not AField.IsNull then
+  begin
+    Stream := TMemoryStream.Create;
+    try
+      TBlobField(AField).SaveToStream(Stream);
+      Stream.Position := 0;
+      Self.LoadFromStream(Stream);
+    finally
+      Stream.Free;
+    end;
+  end;
+end;
 
 end.
 

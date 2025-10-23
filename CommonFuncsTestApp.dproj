@@ -5,11 +5,10 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Android64</Platform>
         <TargetedPlatforms>32770</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>CommonFuncsTestApp.dpr</MainSource>
-        <ProjectName Condition="'$(ProjectName)'==''">CommonFuncsTestApp</ProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -241,6 +240,7 @@
         <DCCReference Include="uCommonAppversion.pas"/>
         <DCCReference Include="uHelperListView.pas"/>
         <DCCReference Include="uHelperStrings.pas"/>
+        <DCCReference Include="uHelperComboBox.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -521,12 +521,6 @@
                 <DeployFile LocalName="Win64\Debug\CommonFuncsTestApp.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>CommonFuncsTestApp.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win64\Debug\CommonFuncsTestApp.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>CommonFuncsTestApp.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

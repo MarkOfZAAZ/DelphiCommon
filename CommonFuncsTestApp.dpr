@@ -17,7 +17,8 @@ uses
   uCommonMySQL in 'uCommonMySQL.pas',
   uCommonAppversion in 'uCommonAppversion.pas',
   uHelperListView in 'uHelperListView.pas',
-  uHelperStrings in 'uHelperStrings.pas';
+  uHelperStrings in 'uHelperStrings.pas',
+  uHelperComboBox in 'uHelperComboBox.pas';
 
 {$R *.res}
 

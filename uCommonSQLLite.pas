@@ -1,13 +1,26 @@
 ﻿// -----------------------------------------------------------------------------
 // Last changed: 23.10.2025
 // -----------------------------------------------------------------------------
-
 unit uCommonSQLLite;
+
+{ TBitmapHelper }
+
+    (*
+      Example usage:
+      Image1.Bitmap.FetchImageFromBlobField(Query.FieldByName('image_blob'));
+    *)
+
 
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Types, FireDAC.Comp.Client, FireDAC.Stan.Param, uCommonDialogs;
+  System.SysUtils, System.Classes, System.Types, FireDAC.Comp.Client, FireDAC.Stan.Param,  FMX.Graphics, Data.DB, uCommonDialogs;
+
+type
+  TBitmapHelper = class helper for TBitmap
+  public
+    procedure FetchImageFromBlobField(AField: TField);
+  end;
 
   function CheckRecordExists(const AConnection: TFDConnection; const ATable, AColumn: string; const AValue: Variant): Boolean;
 
@@ -35,6 +48,30 @@ begin
   finally
     Query.Close;
     Query.Free;
+  end;
+end;
+
+{ TBitmapHelper }
+
+    (*
+      Example usage:
+      Image1.Bitmap.FetchImageFromBlobField(Query.FieldByName('image_blob'));
+    *)
+
+procedure TBitmapHelper.FetchImageFromBlobField(AField: TField);
+var
+  Stream: TMemoryStream;
+begin
+  if Assigned(AField) and (AField is TBlobField) and not AField.IsNull then
+  begin
+    Stream := TMemoryStream.Create;
+    try
+      TBlobField(AField).SaveToStream(Stream);
+      Stream.Position := 0;
+      Self.LoadFromStream(Stream);
+    finally
+      Stream.Free;
+    end;
   end;
 end;
 

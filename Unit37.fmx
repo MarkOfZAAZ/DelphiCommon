@@ -8,11 +8,11 @@ object Form37: TForm37
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  DesignerMasterStyle = 0
+  DesignerMasterStyle = 3
   object btnLeftSlide: TButton
     Anchors = [akLeft, akBottom]
     Position.X = 9.000000000000000000
-    Position.Y = 606.000000000000000000
+    Position.Y = 598.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
@@ -32,22 +32,27 @@ object Form37: TForm37
     Size.Width = 624.000000000000000000
     Size.Height = 444.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 1
+    TabHeight = 49.000000000000000000
+    TabIndex = 2
     TabOrder = 5
     TabPosition = PlatformDefault
     Sizes = (
       624s
-      418s
+      395s
       624s
-      418s)
+      395s
+      624s
+      395s
+      624s
+      395s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
         end>
       TextSettings.Trimming = None
       IsSelected = False
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 156.000000000000000000
+      Size.Height = 49.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -60,22 +65,23 @@ object Form37: TForm37
         Size.Width = 392.000000000000000000
         Size.Height = 288.000000000000000000
         Size.PlatformDefault = False
+        TabHeight = 49.000000000000000000
         TabIndex = 0
         TabOrder = 2
         TabPosition = PlatformDefault
         Sizes = (
           392s
-          262s
+          239s
           392s
-          262s)
+          239s)
         object TabItem3: TTabItem
           CustomIcon = <
             item
             end>
           TextSettings.Trimming = None
           IsSelected = True
-          Size.Width = 69.000000000000000000
-          Size.Height = 26.000000000000000000
+          Size.Width = 196.000000000000000000
+          Size.Height = 49.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = ''
           TabOrder = 0
@@ -89,8 +95,8 @@ object Form37: TForm37
             end>
           TextSettings.Trimming = None
           IsSelected = False
-          Size.Width = 69.000000000000000000
-          Size.Height = 26.000000000000000000
+          Size.Width = 196.000000000000000000
+          Size.Height = 49.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = ''
           TabOrder = 0
@@ -105,9 +111,9 @@ object Form37: TForm37
         item
         end>
       TextSettings.Trimming = None
-      IsSelected = True
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      IsSelected = False
+      Size.Width = 156.000000000000000000
+      Size.Height = 49.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -125,16 +131,105 @@ object Form37: TForm37
         Margins.Right = 8.000000000000000000
         Margins.Bottom = 8.000000000000000000
         Size.Width = 608.000000000000000000
-        Size.Height = 402.000000000000000000
+        Size.Height = 379.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
+    end
+    object TabItem5: TTabItem
+      CustomIcon = <
+        item
+        end>
+      TextSettings.Trimming = None
+      IsSelected = True
+      Size.Width = 156.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'ComboEditCase'
+      ExplicitSize.cx = 104.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object ComboEdit1: TComboEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 10
+        ItemHeight = 19.000000000000000000
+        ItemIndex = -1
+        Position.X = 280.000000000000000000
+        Position.Y = 24.000000000000000000
+      end
+      object Label1: TLabel
+        Position.X = 45.000000000000000000
+        Position.Y = 29.000000000000000000
+        Size.Width = 172.000000000000000000
+        Size.Height = 23.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'ComboEdit CharCase'
+        TabOrder = 11
+      end
+      object ListBox1: TListBox
+        Position.X = 200.000000000000000000
+        Position.Y = 150.000000000000000000
+        TabOrder = 12
+        DisableFocusEffect = True
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        Viewport.Width = 200.000000000000000000
+        Viewport.Height = 200.000000000000000000
+      end
+      object ComboBox1: TComboBox
+        Position.X = 45.000000000000000000
+        Position.Y = 104.000000000000000000
+        Size.Width = 366.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'comboboxstylebox'
+        TabOrder = 13
+      end
+      object Edit1: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 14
+        Position.X = 21.000000000000000000
+        Position.Y = 208.000000000000000000
+        object Text1: TText
+          Position.X = 24.000000000000000000
+          Position.Y = -16.000000000000000000
+        end
+      end
+      object Button1: TButton
+        Anchors = [akLeft, akBottom]
+        Position.X = 433.000000000000000000
+        Position.Y = 24.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 7
+        Text = 'Font Size'
+        TextSettings.Trimming = None
+        OnClick = Button1Click
+      end
+    end
+    object TabItem6: TTabItem
+      CustomIcon = <
+        item
+        end>
+      TextSettings.Trimming = None
+      IsSelected = False
+      Size.Width = 156.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem6'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
     end
   end
   object btnRightSlide: TButton
     Anchors = [akLeft, akBottom]
     Position.X = 137.000000000000000000
-    Position.Y = 606.000000000000000000
+    Position.Y = 598.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
@@ -146,7 +241,7 @@ object Form37: TForm37
   object Button3: TButton
     Anchors = [akLeft, akBottom]
     Position.X = 265.000000000000000000
-    Position.Y = 606.000000000000000000
+    Position.Y = 598.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False

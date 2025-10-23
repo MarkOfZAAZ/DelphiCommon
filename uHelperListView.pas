@@ -24,7 +24,7 @@ unit uHelperListView;
       ListView1.SetSearchHeight(44);
       ListView1.SetSearchFontSize(22);
       ListView1.SetSearchFontColor(TAlphaColors.Red);
-      ListView1.SetSearchCharCase(const ACharCase: TEditCharCase);
+      ListView1.SetSearchCharCase(TEditCharCase.);
 *)
 
 interface
