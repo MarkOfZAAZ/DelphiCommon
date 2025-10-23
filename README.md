@@ -1,5 +1,5 @@
 # Delphi Dabbling
-The code in this repository are a collection of bits n bobs that I am fed up of reacreating in every application!
+The code in this repository are a collection of bits n bobs that I am fed up of re-creating in every application!
 
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
