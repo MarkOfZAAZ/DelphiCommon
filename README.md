@@ -1,6 +1,9 @@
 # Delphi Dabbling
 The code in this repository are a collection of bits n bobs that I am fed up of re-creating in every application!
 
+## uHelperListView
+This is essentially the Component TListViewZaaz (modified TListView) as Class Helpers, hence no requirement to install a component! (Makes moving the code to a different IDE simpler)
+
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
 
