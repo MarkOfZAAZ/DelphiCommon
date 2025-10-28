@@ -4,15 +4,6 @@ The code in this repository are a collection of bits n bobs that I am fed up of 
 ## uHelperListView
 This is essentially the Component TListViewZaaz (modified TListView) as Class Helpers, hence no requirement to install a component! (Makes moving the code to a different IDE simpler)
 
-## Authors
-😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
-
-## Version History
-* 21/10/2025 **First Checkin**
-
-## License
-✅ Do what you want with this, any improvements would be helpfull
-
 ## Launch a second form
 One of the first things I did using RAD Studio, was launch a second TForm object (This was back way before Android / IOS existed)
 Something to remember: Do you need to automatically create the form at application start?
@@ -78,6 +69,14 @@ begin
    end;
 end;
 ```
+## Authors
+😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
+
+## Version History
+* 21/10/2025 **First Checkin**
+
+## License
+✅ Do what you want with this, any improvements would be helpfull
 
 ## 💬 Disclaimer
 This software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
