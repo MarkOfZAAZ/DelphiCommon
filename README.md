@@ -6,7 +6,9 @@ This is essentially the Component TListViewZaaz (modified TListView) as Class He
 
 ## Launch a second form
 One of the first things I did using RAD Studio, was launch a second TForm object (This was back way before Android / IOS existed)
+
 Something to remember: Do you need to automatically create the form at application start?
+
 If not, then in your project, click on the menu Project---> Options---> Forms and remove the appropriate forms from the Auto-create forms list box
 
 ### FMX (Android to avoid thread issues)
