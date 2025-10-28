@@ -11,7 +11,26 @@ Something to remember: Do you need to automatically create the form at applicati
 
 If not, then in your project, click on the menu Project---> Options---> Forms and remove the appropriate forms from the Auto-create forms list box
 
-### FMX (Android / IOS to avoid it returning straight away!)
+### FMX Modern Style Delphi code (For Android / IOS to avoid it returning straight away!)
+This approach uses the modern Delphi in code variable (var) declarations, i..e at create time, not in the section between the procedure/function and the first begin.
+
+The boat is still out for me! 
+
+```delphi
+procedure TMainForm.btnShowSecondForm(Sender: TObject);
+begin
+   var := TTheSecondForm.Create(nil);
+   frm.ShowModal (
+      procedure(ModalResult: TModalResult)
+      begin
+         // Put something here to do AFTER form has closed and come back e.g.
+         // RefreshFirstPage;
+      end
+   );
+end;
+```
+
+### FMX Traditional Delphi code (For Android / IOS to avoid it returning straight away!)
 ```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
