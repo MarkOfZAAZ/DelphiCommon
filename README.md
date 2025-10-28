@@ -30,6 +30,7 @@ This is essentially the Component TListViewZaaz (modified TListView) as Class He
          end
       );
    end;
+---
 
 
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
