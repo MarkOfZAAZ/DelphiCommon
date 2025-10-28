@@ -13,19 +13,59 @@ This is essentially the Component TListViewZaaz (modified TListView) as Class He
 ## License
 ✅ Do what you want with this, any improvements would be helpfull
 
-## Launch a second form FMX (Android)
+## Launch a second form
+
+### FMX (Android to avoid thread issues)
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
-  frm: TTheSecondForm;
+   frm: TTheSecondForm;
 begin
-  frm := TTheSecondForm.Create(nil);
-  frm.ShowModal (
-    procedure(ModalResult: TModalResult)
-    begin
-      // Put something here to do AFTER form has closed and come back e.g.
-      // RefreshFirstPage;
-    end
-  );
+   frm := TTheSecondForm.Create(nil);
+   frm.ShowModal (
+      procedure(ModalResult: TModalResult)
+      begin
+         // Put something here to do AFTER form has closed and come back e.g.
+         // RefreshFirstPage;
+      end
+   );
+end;
+### FMX with error catching
+procedure TMainForm.btnShowSecondForm(Sender: TObject);
+var
+   frm: TTheSecondForm;
+begin
+   try
+      frm := TTheSecondForm.Create(nil);
+      frm.ShowModal(
+      procedure(ModalResult: TModalResult)
+      begin
+         try
+            // Put something here to do AFTER form has closed and come back e.g.
+            // RefreshFirstPage;
+         except
+            on E: Exception do
+               ShowMessage('Error after closing form: ' + E.Message);
+         end;
+         frm.DisposeOf; // Ensures proper cleanup on mobile
+      end
+      );
+   except
+      on E: Exception do
+         ShowMessage('Error showing form: ' + E.Message);
+   end;
+end;
+
+### VCL
+procedure TMainForm.btnShowSecondForm(Sender: TObject);
+var
+   frm: TTheSecondForm;
+begin
+   frm := TTheSecondForm.Create(self);
+   try
+      frm.ShowModal;
+   finally
+      frm.Free;
+   end;
 end;
 
 ## 💬 Disclaimer
