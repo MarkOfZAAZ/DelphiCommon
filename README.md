@@ -16,7 +16,7 @@ This is essentially the Component TListViewZaaz (modified TListView) as Class He
 ## Launch a second form
 
 ### FMX (Android to avoid thread issues)
-'''Delphi
+```delphi
    procedure TMainForm.btnShowSecondForm(Sender: TObject);
    var
       frm: TTheSecondForm;
@@ -30,7 +30,8 @@ This is essentially the Component TListViewZaaz (modified TListView) as Class He
          end
       );
    end;
-'''
+
+
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
    frm: TTheSecondForm;
