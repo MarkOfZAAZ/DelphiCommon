@@ -11,7 +11,7 @@ Something to remember: Do you need to automatically create the form at applicati
 
 If not, then in your project, click on the menu Project---> Options---> Forms and remove the appropriate forms from the Auto-create forms list box
 
-### FMX (Android to avoid thread issues)
+### FMX (Android / IOS to avoid it reurning straight away!)
 ```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
@@ -23,37 +23,8 @@ begin
       begin
          // Put something here to do AFTER form has closed and come back e.g.
          // RefreshFirstPage;
-         frm.Free; // let the device clean up properly
       end
    );
-end;
-```
-
-### FMX with error catching
-```delphi
-procedure TMainForm.btnShowSecondForm(Sender: TObject);
-var
-   frm: TTheSecondForm;
-begin
-   try
-      frm := TTheSecondForm.Create(nil);
-      frm.ShowModal(
-         procedure(ModalResult: TModalResult)
-         begin
-            try
-               // Put something here to do AFTER form has closed and come back e.g.
-               // RefreshFirstPage;
-            except
-               on E: Exception do
-                  ShowMessage('Error after closing form: ' + E.Message);
-            end;
-            frm.Free; // Ensures proper cleanup on mobile
-         end
-      );
-   except
-      on E: Exception do
-         ShowMessage('Error showing form: ' + E.Message);
-   end;
 end;
 ```
 
@@ -67,10 +38,11 @@ begin
    try
       frm.ShowModal;
    finally
-      frm.Free;
+      frm.Free; // safe in VCL apps, not so much in FMX
    end;
 end;
 ```
+
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
 
