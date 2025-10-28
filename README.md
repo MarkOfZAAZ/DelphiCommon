@@ -27,6 +27,7 @@ begin
       begin
          // Put something here to do AFTER form has closed and come back e.g.
          // RefreshFirstPage;
+         frm.DisposeOf; // let the device clean up properly (rather than frm.Free)
       end
    );
 end;
