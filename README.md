@@ -33,6 +33,7 @@ end;
 ```
 
 ### FMX with error catching
+```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
    frm: TTheSecondForm;
@@ -57,8 +58,10 @@ begin
          ShowMessage('Error showing form: ' + E.Message);
    end;
 end;
+```
 
 ### VCL
+```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
    frm: TTheSecondForm;
@@ -70,6 +73,7 @@ begin
       frm.Free;
    end;
 end;
+```
 
 ## 💬 Disclaimer
 This software is provided "as is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
