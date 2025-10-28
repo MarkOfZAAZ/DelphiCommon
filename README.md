@@ -38,17 +38,17 @@ begin
    try
       frm := TTheSecondForm.Create(nil);
       frm.ShowModal(
-      procedure(ModalResult: TModalResult)
-      begin
-         try
-            // Put something here to do AFTER form has closed and come back e.g.
-            // RefreshFirstPage;
-         except
-            on E: Exception do
-               ShowMessage('Error after closing form: ' + E.Message);
-         end;
-         frm.DisposeOf; // Ensures proper cleanup on mobile
-      end
+         procedure(ModalResult: TModalResult)
+         begin
+            try
+               // Put something here to do AFTER form has closed and come back e.g.
+               // RefreshFirstPage;
+            except
+               on E: Exception do
+                  ShowMessage('Error after closing form: ' + E.Message);
+            end;
+            frm.DisposeOf; // Ensures proper cleanup on mobile
+         end
       );
    except
       on E: Exception do
