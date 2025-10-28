@@ -47,7 +47,20 @@ begin
 end;
 ```
 
-### VCL
+### VCL Modern style Delphi code
+```delphi
+procedure TMainForm.btnShowSecondForm(Sender: TObject);
+begin
+   var frm := TTheSecondForm.Create(self);
+   try
+      frm.ShowModal;
+   finally
+      frm.Free; // safe in VCL apps, not so much in FMX
+   end;
+end;
+```
+
+### VCL Traditional style Delphi code
 ```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
 var
