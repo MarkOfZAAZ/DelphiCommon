@@ -23,7 +23,7 @@ begin
       begin
          // Put something here to do AFTER form has closed and come back e.g.
          // RefreshFirstPage;
-         frm.DisposeOf; // let the device clean up properly (rather than frm.Free)
+         frm.Free; // let the device clean up properly
       end
    );
 end;
@@ -47,7 +47,7 @@ begin
                on E: Exception do
                   ShowMessage('Error after closing form: ' + E.Message);
             end;
-            frm.DisposeOf; // Ensures proper cleanup on mobile
+            frm.Free; // Ensures proper cleanup on mobile
          end
       );
    except
