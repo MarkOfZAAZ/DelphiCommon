@@ -43,24 +43,27 @@ uses
 type
   TSkLabelHelper = class helper for TSkLabel
   private
-    procedure EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean = False);
+    procedure EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
+      UseLightTheme: Boolean = False);
     procedure ApplyTwoWordTheme(const Word0Text, Word1Text: string;
       Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean = False);
   public
     // LastChanged helpers
     procedure ClearLastChanged;
-    procedure SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean = False); overload;
-    procedure SetLastChanged(const AValue: string; UseLightTheme: boolean = False); overload;
+    procedure SetLastChanged(const ADateTime: TDateTime; UseLightTheme: Boolean = False); overload;
+    procedure SetLastChanged(const AValue: string; UseLightTheme: Boolean = False); overload;
+
     // Header helpers
     procedure ClearHeader;
-    procedure SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean = False);
+    procedure SetHeaderText(const AMain, ASubhead: string; UseLightTheme: Boolean = False);
   end;
 
 implementation
 
 { TSkLabelHelper }
 
-procedure TSkLabelHelper.EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean);
+procedure TSkLabelHelper.EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
+  UseLightTheme: Boolean);
 var
   Word0Color, Word1Color: TAlphaColor;
 begin
@@ -74,14 +77,17 @@ begin
     Word0Color := TAlphaColors.Paleturquoise;
     Word1Color := TAlphaColors.White;
   end;
+
   Words.BeginUpdate;
   try
     // Ensure at least two words exist
     while Words.Count < 2 do
       Words.Add;
+
     // Always enforce font sizes and colors
     Words[0].Font.Size := Word0FontSize;
     Words[0].FontColor := Word0Color;
+
     Words[1].Font.Size := Word1FontSize;
     Words[1].FontColor := Word1Color;
   finally
@@ -93,6 +99,7 @@ procedure TSkLabelHelper.ApplyTwoWordTheme(const Word0Text, Word1Text: string;
   Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean);
 begin
   EnsureTwoWordLayout(Word0FontSize, Word1FontSize, UseLightTheme);
+
   Words.BeginUpdate;
   try
     Words[0].Text := Word0Text;
@@ -104,15 +111,15 @@ end;
 
 procedure TSkLabelHelper.ClearLastChanged;
 begin
-  EnsureTwoWordLayout(14, 16);
+  ApplyTwoWordTheme('Last changed ', '--', 14, 16);
 end;
 
-procedure TSkLabelHelper.SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean);
+procedure TSkLabelHelper.SetLastChanged(const ADateTime: TDateTime; UseLightTheme: Boolean);
 begin
   ApplyTwoWordTheme('Last changed ', FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime), 14, 16, UseLightTheme);
 end;
 
-procedure TSkLabelHelper.SetLastChanged(const AValue: string; UseLightTheme: boolean);
+procedure TSkLabelHelper.SetLastChanged(const AValue: string; UseLightTheme: Boolean);
 var
   DT: TDateTime;
 begin
@@ -127,9 +134,9 @@ begin
   ApplyTwoWordTheme(' ', ' ', 16, 18);
 end;
 
-procedure TSkLabelHelper.SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean);
+procedure TSkLabelHelper.SetHeaderText(const AMain, ASubhead: string; UseLightTheme: Boolean);
 begin
-  EnsureTwoWordLayout(16, 18, UseLightTheme);
+  ApplyTwoWordTheme(AMain, ASubhead, 16, 18, UseLightTheme);
 end;
 
 end.
