@@ -1,147 +1,145 @@
-// -----------------------------------------------------------------------------
-// Copyright � 1994 - 2026 Aldwicks Limited - Developed for RAD Studio 13
+﻿// -----------------------------------------------------------------------------
+// Copyright © 1994 - 2026 Aldwicks Limited - Developed for RAD Studio 13
 //
-// Last changed: 20.01.2026 14:11
+// Last changed: 20.01.2026 16:17
 // -----------------------------------------------------------------------------
 
-unit uHelperLastChangedLabel;
+unit uHelperSkiaLabel;
 
 (*
-  Allows the user to drop a SkLabel component (skia label) onto a form 
-  and it is automatically assignmed as a two word label, the first word showing the text Last changed 
-  the second word dd/mm/yyyy hh:nn:ss of a TDateTime or a string passed to it.
-  It automatically decides which colours to use, based on the parent background colour
-  
-  ? How to use...
+   ✅ Key Features
+      Fully auto-initializing: EnsureTwoWordLayout creates Words[0] and Words[1] if they don’t exist.
+      Dark theme default: no brightness checks or parent color estimation.
+      Overloaded SetLastChanged: works with both TDateTime and string.
+      Header layout handled automatically.
+      Clean API — you never touch ApplyTwoWordTheme unless you want a custom theme manually.
 
-    Drop a plain TSkLabel on your form.
-    
-    Then whenever required:
-  
-    SkLabel1.SetLastChanged(Now); // Show now (replace Now with database setting etc)
-    SkLabel1.SetLastChanged(JobRec.LastChanged); // Show from a class with a TDateTime component
-    SkLabel1.SetLastChangedText('2026-01-19 14:22:01');
-  
-    If you want to show a clear value the
-    SkLabel1.ClearLastChanged; // This will display the Lastchanged -- 
+   👉 How to use DARK (Default)...
+      // Last changed
+      SkLabel1.SetLastChanged(Now);
+      SkLabel1.SetLastChanged('2026-01-20 14:00:00');
+
+      // Header
+      SkLabel1.SetHeaderText('EDIT CUSTOMER', 'SCOTT BLACKSMITHS');
+
+   👉 How to use LIGHT
+      // Last changed
+      SkLabel1.SetLastChanged(Now, true);
+      SkLabel1.SetLastChanged('2026-01-20 14:00:00', true);
+
+      // Header
+      SkLabel1.SetHeaderText('EDIT CUSTOMER', 'SCOTT BLACKSMITHS', true);
+
+   👉 How to clear
+      SkLabel1.ClearLastChanged;
+      SkLabel1.ClearHeader;
 *)
 
 interface
 
 uses
-  System.SysUtils,
-  System.UITypes,
-  FMX.Skia,
-  FMX.Types,
-  FMX.Controls;
+  System.SysUtils, System.UITypes, System.Classes, FMX.Skia;
 
 type
-  TSkLabelLastChangedHelper = class helper for TSkLabel
+  TSkLabelHelper = class helper for TSkLabel
+  private
+    procedure EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
+      UseLightTheme: Boolean = False);
+    procedure ApplyTwoWordTheme(const Word0Text, Word1Text: string;
+      Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean = False);
   public
-    procedure ApplyLastChangedThemeAuto;
+    // LastChanged helpers
     procedure ClearLastChanged;
-    procedure SetLastChangedText(const AValue: string); overload;
-    procedure SetLastChanged(const ADateTime: TDateTime); overload;
+    procedure SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean = False); overload;
+    procedure SetLastChanged(const AValue: string; UseLightTheme: boolean = False); overload;
+
+    // Header helpers
+    procedure ClearHeader;
+    procedure SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean = False);
   end;
 
 implementation
 
-{ TSkLabelLastChangedHelper }
+{ TSkLabelHelper }
 
-procedure TSkLabelLastChangedHelper.ApplyLastChangedThemeAuto;
+procedure TSkLabelHelper.EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
+  UseLightTheme: Boolean);
 var
   Word0Color, Word1Color: TAlphaColor;
-  Brightness: Single;
-  LBackColor: TAlphaColor;
-
-  function GetBrightness(const Color: TAlphaColor): Single;
-  var
-    R, G, B: Byte;
-  begin
-    R := TAlphaColorRec(Color).R;
-    G := TAlphaColorRec(Color).G;
-    B := TAlphaColorRec(Color).B;
-    Result := (0.299 * R + 0.587 * G + 0.114 * B) / 255;
-  end;
-
-  // Attempt to estimate a background color from parent controls
-  function EstimateBackgroundColor: TAlphaColor;
-  var
-    C: TFmxObject;
-  begin
-    C := Self.Parent;
-    while Assigned(C) do
-    begin
-      if C is TControl then
-      begin
-        // Use StyleLookup or other heuristics here if you want
-        Exit(TAlphaColors.Black); // fallback to dark (label over dark background)
-      end;
-      C := C.Parent;
-    end;
-    Result := TAlphaColors.Black;
-  end;
-
 begin
-  LBackColor := EstimateBackgroundColor;
-  Brightness := GetBrightness(LBackColor);
-
-  if Brightness > 0.7 then
+  if UseLightTheme then
   begin
-    // Light background ? dark text
     Word0Color := TAlphaColors.DodgerBlue;
     Word1Color := TAlphaColors.Black;
   end
   else
   begin
-    // Dark background ? light text
     Word0Color := TAlphaColors.Paleturquoise;
     Word1Color := TAlphaColors.White;
   end;
-
   Words.BeginUpdate;
   try
-    Words.Clear;
-    // Word 0: static label
-    with Words.Add do
-    begin
-      Text := 'Last changed ';
-      Font.Size := 14;
-      FontColor := Word0Color;
-    end;
-    // Word 1: date/time
-    with Words.Add do
-    begin
-      Text := '--';
-      Font.Size := 16;
-      FontColor := Word1Color;
-    end;
+    // Ensure at least two words exist
+    while Words.Count < 2 do
+      Words.Add;
+    // Always enforce font sizes and colors
+    Words[0].Font.Size := Word0FontSize;
+    Words[0].FontColor := Word0Color;
+    Words[1].Font.Size := Word1FontSize;
+    Words[1].FontColor := Word1Color;
   finally
     Words.EndUpdate;
   end;
 end;
 
-procedure TSkLabelLastChangedHelper.ClearLastChanged;
+procedure TSkLabelHelper.ApplyTwoWordTheme(const Word0Text, Word1Text: string;
+  Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean);
 begin
-  ApplyLastChangedThemeAuto;
+  EnsureTwoWordLayout(Word0FontSize, Word1FontSize, UseLightTheme);
+  Words.BeginUpdate;
+  try
+    Words[0].Text := Word0Text;
+    Words[1].Text := Word1Text;
+  finally
+    Words.EndUpdate;
+  end;
 end;
 
-procedure TSkLabelLastChangedHelper.SetLastChangedText(const AValue: string);
+procedure TSkLabelHelper.ClearLastChanged;
+begin
+  EnsureTwoWordLayout(14, 16);
+  Words[0].Text := 'Last changed ';
+  Words[1].Text := '--';
+end;
+
+procedure TSkLabelHelper.SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean);
+begin
+  ApplyTwoWordTheme('Last changed ', FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime), 14, 16, UseLightTheme);
+  EnsureTwoWordLayout(14, 16);
+  Words[0].Text := 'Last changed ';
+  Words[1].Text := FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime);
+end;
+
+procedure TSkLabelHelper.SetLastChanged(const AValue: string; UseLightTheme: boolean);
 var
   DT: TDateTime;
 begin
   if not TryStrToDateTime(AValue, DT) then
-  begin
-    ClearLastChanged;
-    Exit;
-  end;
-  SetLastChanged(DT);
+    ClearLastChanged
+  else
+    SetLastChanged(DT, UseLightTheme);
 end;
 
-procedure TSkLabelLastChangedHelper.SetLastChanged(const ADateTime: TDateTime);
+procedure TSkLabelHelper.ClearHeader;
 begin
-  ApplyLastChangedThemeAuto;
-  Words[1].Text := FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime);
+  ApplyTwoWordTheme(' ', ' ', 16, 18);
+end;
+
+procedure TSkLabelHelper.SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean);
+begin
+  EnsureTwoWordLayout(16, 18, UseLightTheme);
+  Words[0].Text := AMain;
+  Words[1].Text := ASubhead;
 end;
 
 end.
