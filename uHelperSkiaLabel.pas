@@ -1,7 +1,7 @@
 ﻿// -----------------------------------------------------------------------------
 // Copyright © 1994 - 2026 Aldwicks Limited - Developed for RAD Studio 13
 //
-// Last changed: 20.01.2026 16:17
+// Last changed: 20.01.2026 17:24
 // -----------------------------------------------------------------------------
 
 unit uHelperSkiaLabel;
@@ -43,8 +43,7 @@ uses
 type
   TSkLabelHelper = class helper for TSkLabel
   private
-    procedure EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
-      UseLightTheme: Boolean = False);
+    procedure EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean = False);
     procedure ApplyTwoWordTheme(const Word0Text, Word1Text: string;
       Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean = False);
   public
@@ -52,7 +51,6 @@ type
     procedure ClearLastChanged;
     procedure SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean = False); overload;
     procedure SetLastChanged(const AValue: string; UseLightTheme: boolean = False); overload;
-
     // Header helpers
     procedure ClearHeader;
     procedure SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean = False);
@@ -62,8 +60,7 @@ implementation
 
 { TSkLabelHelper }
 
-procedure TSkLabelHelper.EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single;
-  UseLightTheme: Boolean);
+procedure TSkLabelHelper.EnsureTwoWordLayout(Word0FontSize, Word1FontSize: Single; UseLightTheme: Boolean);
 var
   Word0Color, Word1Color: TAlphaColor;
 begin
@@ -108,16 +105,11 @@ end;
 procedure TSkLabelHelper.ClearLastChanged;
 begin
   EnsureTwoWordLayout(14, 16);
-  Words[0].Text := 'Last changed ';
-  Words[1].Text := '--';
 end;
 
 procedure TSkLabelHelper.SetLastChanged(const ADateTime: TDateTime; UseLightTheme: boolean);
 begin
   ApplyTwoWordTheme('Last changed ', FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime), 14, 16, UseLightTheme);
-  EnsureTwoWordLayout(14, 16);
-  Words[0].Text := 'Last changed ';
-  Words[1].Text := FormatDateTime('dd/mm/yyyy hh:nn:ss', ADateTime);
 end;
 
 procedure TSkLabelHelper.SetLastChanged(const AValue: string; UseLightTheme: boolean);
@@ -138,8 +130,6 @@ end;
 procedure TSkLabelHelper.SetHeaderText(const AMain, ASubhead: string; UseLightTheme: boolean);
 begin
   EnsureTwoWordLayout(16, 18, UseLightTheme);
-  Words[0].Text := AMain;
-  Words[1].Text := ASubhead;
 end;
 
 end.
