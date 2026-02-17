@@ -4,6 +4,17 @@ The code in this repository are a collection of bits n bobs that I am fed up of 
 ## uHelperListView
 This is essentially the Component TListViewZaaz (modified TListView) as Class Helpers, hence no requirement to install a component! (Makes moving the code to a different IDE simpler)
 
+## uSvgHelper
+This is a simple unit to help save an SVG file as a .PNG file
+Simple to call:
+```delphi
+procedure TMainForm.btnClcik(Sender: TObject);
+begin
+   // ensure uSvgHelper is in the uses
+   ExportSvgToPngKeepingAspect(SkSVG1.svg.source, 330, 'engineer-330.png');
+end;
+```
+
 ## Launch a second form
 One of the first things I did using RAD Studio, was launch a second TForm object (This was back way before Android / IOS existed)
 
