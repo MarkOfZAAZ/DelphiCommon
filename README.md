@@ -90,7 +90,6 @@ end;
 
 
 > ## Using PROVIDERS to launch external PDF document viewer on Android
-
 > [!IMPORTANT]
 > ### This has been tested under Delphi 12.3 Android64, Windows64
 
