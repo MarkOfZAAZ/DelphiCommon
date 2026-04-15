@@ -88,7 +88,7 @@ begin
 end;
 ```
 
-## Using PROVIDERS to launch external PDF document viewer on Android
+> ## Using PROVIDERS to launch external PDF document viewer on Android
 
 Recent versions of Android require that providers must be used to launch a external viewer for things like PDF which are not natively supported under Android
 The following instructions should help you to configure the application manifest so it can use the provider
