@@ -41,6 +41,8 @@ begin
 end;
 ```
 
+Now whenever you create your pdf
+
 ### FMX Traditional Delphi code (For Android / IOS to avoid it returning straight away!)
 ```delphi
 procedure TMainForm.btnShowSecondForm(Sender: TObject);
@@ -283,6 +285,53 @@ begin
     Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);
   {$ELSE}
     Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);  // Default fallback
+  {$ENDIF}
+end;
+```
+
+Now when you create your PDF, you can pass the filename to the function and then show it using shoething along the lines of
+```delphi
+procedure LaunchPDFProvider(const AFilename: String);
+{$IF Defined(Android)}
+var
+  Intent: JIntent;
+  FileObj: JFile;
+  Uri: Jnet_Uri;
+  Authority: JString;
+{$ENDIF}
+{$IF Defined(IOS)}
+var
+  URL: NSURL;
+{$ENDIF}
+{$IF Defined(MACOS)}
+var
+  URL: NSURL;
+{$ENDIF}
+begin
+  if AFilename.IsEmpty then
+    Exit;
+  if not FileExists(AFilename) then
+    Exit;
+  {$IF Defined(MSWINDOWS)}
+    ShellExecute(0, nil, PChar(AFilename), nil, nil, SW_SHOWNORMAL);
+  {$ENDIF}
+  {$IF Defined(Android)}
+    FileObj := TJFile.JavaClass.init(StringToJString(AFilename));
+    Authority := StringToJString(JStringToString(TAndroidHelper.Context.getPackageName) + '.provider');
+    Uri := TJContent_FileProvider.JavaClass.getUriForFile(TAndroidHelper.Context, Authority, FileObj);
+    Intent := TJIntent.JavaClass.init(TJIntent.JavaClass.ACTION_VIEW);
+    Intent.setDataAndType(Uri, StringToJString('application/pdf'));
+    Intent.addFlags(TJIntent.JavaClass.FLAG_GRANT_READ_URI_PERMISSION);
+    Intent.addFlags(TJIntent.JavaClass.FLAG_ACTIVITY_NO_HISTORY);
+    TAndroidHelper.Activity.startActivity(Intent);
+  {$ENDIF}
+  {$IF Defined(IOS)}
+    URL := TNSURL.Wrap(TNSURL.OCClass.fileURLWithPath(NSStr(AFilename)));
+    SharedApplication.openURL(URL);
+  {$ENDIF}
+  {$IF Defined(MACOS)}
+    URL := TNSURL.Wrap(TNSURL.OCClass.fileURLWithPath(NSStr(AFilename)));
+    NSWorkspace.sharedWorkspace.openURL(URL);
   {$ENDIF}
 end;
 ```
