@@ -106,6 +106,7 @@ Ensure you have Android64 Bit platform selected:
 In the Delphi IDE, Menu Project->Deployment to launch the deployment screen
 Click "Add files" tool button and select the fileprovider.xml
 In Remote Path set the path as <b>res\xml\ <b> (note the trailing \ backslash)
+Ensure you do this for BOTH Release and Debug!
 
 ### Change the default AndroidManifest.template.xml
 When you fist deploy your android application, the IDE automatically creates a AndroidManifest.template.xml file in the project root folder
@@ -264,6 +265,27 @@ Essentially this gives you something like
 <!-- END_INCLUDE(manifest) -->
 ```
 
+### How to call the provider from code...
+According to the web, recent version of Delphi targetting Android that use providers should place the files that want to be shown in the TPath.GetCachePath
+One way would be to create a function that you pass the filename to, and it returns the filename with it's fully qualified path, for example 
+
+```delphi
+function GetProviderPath(const AFilename: string): string;
+begin
+  // Used to get the fully qualified device independant file name for the pdf worksheet
+  {$IF DEFINED(Android)}
+    Result := TPath.Combine(TPath.GetCachePath, AFilename);  // Cache for FileProvider sharing
+  {$ELSEIF DEFINED(MSWINDOWS)}
+    Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);
+  {$ELSEIF DEFINED(MACOS)}
+    Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);
+  {$ELSEIF DEFINED(IOS)}
+    Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);
+  {$ELSE}
+    Result := TPath.Combine(TPath.GetDocumentsPath, AFilename);  // Default fallback
+  {$ENDIF}
+end;
+```
 
 
 ## Authors
