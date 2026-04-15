@@ -94,7 +94,8 @@ end;
 > ### This has been tested under Delphi 12.3 Android64, Windows64
 
 Recent versions of Android require that providers must be used to launch a external viewer for things like PDF which are not natively supported under Android
-The following instructions should help you to configure the application manifest so it can use the provider
+The following instructions should help you to configure the application manifest so it can use the provider. I spent hours using chatGPT, Copilot, Preplexity etc, and trawling hundreds of delphi documents, but not one showed the steps, the legendary Stephen A Ball has a video how to [@Stephan Ball](https://delphiaball.co.uk/2018/08/03/opening-a-pdf-on-android-with-delphi/) but sometimes simply how to do in writing helps!
+
 
 ### Step 1 : Create a fileprovider.xml file
 Create a file names fileprovider.xml in your Delphi project, and give it the following contents...
