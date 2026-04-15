@@ -99,6 +99,14 @@ Create a file names fileprovider.xml in your Delphi project, and give it the fol
 </paths>
 ```
 
+### Add it to the deployment
+Ensure you have Android64 Bit platform selected 
+In the Delphi IDE, Menu Project->Deployment to launch the deployment screen
+Click "Add files" tool button and select the fileprovider.xml
+In Remote Path set the path as <b>res\xml\</b>
+
+
+
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
 
