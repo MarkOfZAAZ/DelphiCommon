@@ -86,7 +86,9 @@ begin
 end;
 ```
 
-### Using PROVIDERS to launch external PDF document viewer on Android
+## Using PROVIDERS to launch external PDF document viewer on Android
+
+### Create a fileprovider.xml file
 
 Create a file names fileprovider.xml in your Delphi project, and give it the following contents...
 ```xml
