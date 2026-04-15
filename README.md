@@ -88,8 +88,10 @@ end;
 
 ## Using PROVIDERS to launch external PDF document viewer on Android
 
-### Create a fileprovider.xml file
+Recent versions of Android require that providers must be used to launch a external viewer for things like PDF which are not natively supported under Android
+The following instructions should help you to configure the application manifest so it can use the provider
 
+### Step 1 : Create a fileprovider.xml file
 Create a file names fileprovider.xml in your Delphi project, and give it the following contents...
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -100,10 +102,167 @@ Create a file names fileprovider.xml in your Delphi project, and give it the fol
 ```
 
 ### Add it to the deployment
-Ensure you have Android64 Bit platform selected 
+Ensure you have Android64 Bit platform selected:
 In the Delphi IDE, Menu Project->Deployment to launch the deployment screen
 Click "Add files" tool button and select the fileprovider.xml
-In Remote Path set the path as <b>res\xml\ <b>
+In Remote Path set the path as <b>res\xml\ <b> (note the trailing \ backslash)
+
+### Change the default AndroidManifest.template.xml
+When you fist deploy your android application, the IDE automatically creates a AndroidManifest.template.xml file in the project root folder
+It will typically look like this:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BEGIN_INCLUDE(manifest) -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="%package%"
+    android:versionCode="%versionCode%"
+    android:versionName="%versionName%"
+    android:installLocation="%installLocation%">
+    <uses-sdk android:minSdkVersion="%minSdkVersion%" android:targetSdkVersion="34" />
+<%uses-permission%>
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <queries>
+<%queries-child-elements%>
+    </queries>
+    <application
+        android:persistent="%persistent%"
+        android:restoreAnyVersion="%restoreAnyVersion%"
+        android:label="%label%"
+        android:debuggable="%debuggable%"
+        android:largeHeap="%largeHeap%"
+        android:icon="%icon%"
+        android:theme="%theme%"
+        android:hardwareAccelerated="%hardwareAccelerated%"
+        android:resizeableActivity="true"
+        android:requestLegacyExternalStorage="true">
+<%provider%>
+<%application-meta-data%>
+<%uses-libraries%>
+        <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+
+            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+        </service>
+<%services%>
+        <!-- Our activity is a subclass of the built-in NativeActivity framework class.
+             This will take care of integrating with our NDK code. -->
+        <activity
+            android:name="com.embarcadero.firemonkey.FMXNativeActivity"
+            android:exported="true"
+            android:label="%activityLabel%"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:launchMode="singleTask">
+            <!-- Tell NativeActivity the name of our .so -->
+            <meta-data android:name="android.app.lib_name" android:value="%libNameValue%" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+<%activity%>
+<%receivers%>
+    </application>
+</manifest>
+<!-- END_INCLUDE(manifest) -->
+```
+
+In order to use the provider, we must change the line <b><%provider%><b> with the following:
+```xml
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="%package%.provider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/fileprovider" />
+</provider>
+```
+
+Essentially this gives you something like
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BEGIN_INCLUDE(manifest) -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="%package%"
+    android:versionCode="%versionCode%"
+    android:versionName="%versionName%"
+    android:installLocation="%installLocation%">
+    <uses-sdk android:minSdkVersion="%minSdkVersion%" android:targetSdkVersion="34" />
+<%uses-permission%>
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <queries>
+<%queries-child-elements%>
+    </queries>
+    <application
+        android:persistent="%persistent%"
+        android:restoreAnyVersion="%restoreAnyVersion%"
+        android:label="%label%"
+        android:debuggable="%debuggable%"
+        android:largeHeap="%largeHeap%"
+        android:icon="%icon%"
+        android:theme="%theme%"
+        android:hardwareAccelerated="%hardwareAccelerated%"
+        android:resizeableActivity="true"
+        android:requestLegacyExternalStorage="true">
+<provider
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="%package%.provider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/fileprovider" />
+</provider>
+<%application-meta-data%>
+<%uses-libraries%>
+        <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+
+            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+        </service>
+<%services%>
+        <!-- Our activity is a subclass of the built-in NativeActivity framework class.
+             This will take care of integrating with our NDK code. -->
+        <activity
+            android:name="com.embarcadero.firemonkey.FMXNativeActivity"
+            android:exported="true"
+            android:label="%activityLabel%"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|uiMode"
+            android:launchMode="singleTask">
+            <!-- Tell NativeActivity the name of our .so -->
+            <meta-data android:name="android.app.lib_name" android:value="%libNameValue%" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+<%activity%>
+<%receivers%>
+    </application>
+</manifest>
+<!-- END_INCLUDE(manifest) -->
+```
 
 
 
