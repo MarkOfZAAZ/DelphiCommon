@@ -88,7 +88,11 @@ begin
 end;
 ```
 
+
 > ## Using PROVIDERS to launch external PDF document viewer on Android
+
+> [!IMPORTANT]
+> ### This has been tested under Delphi 12.3 Android64, Windows64
 
 Recent versions of Android require that providers must be used to launch a external viewer for things like PDF which are not natively supported under Android
 The following instructions should help you to configure the application manifest so it can use the provider
@@ -289,7 +293,8 @@ begin
 end;
 ```
 
-Now when you create your PDF, you can pass the filename to the function and then show it using shoething along the lines of
+Now when you create your PDF, you can pass the filename to the function and then show it using something along the lines of the following
+
 ```delphi
 procedure LaunchPDFProvider(const AFilename: String);
 {$IF Defined(Android)}
