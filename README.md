@@ -86,6 +86,17 @@ begin
 end;
 ```
 
+### Using PROVIDERS to launch external PDF document viewer on Android
+
+Create a file names fileprovider.xml in your Delphi project, and give it the following contents...
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <cache-path name="cache" path="." />
+    <external-files-path name="files" path="." />
+</paths>
+```
+
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
 
