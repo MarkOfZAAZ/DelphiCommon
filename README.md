@@ -223,15 +223,20 @@ Essentially this gives you something like
         android:hardwareAccelerated="%hardwareAccelerated%"
         android:resizeableActivity="true"
         android:requestLegacyExternalStorage="true">
-<provider
-    android:name="androidx.core.content.FileProvider"
-    android:authorities="%package%.provider"
-    android:exported="false"
-    android:grantUriPermissions="true">
-    <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/fileprovider" />
-</provider>
+        <!--
+            Replaced the default so it handles pdf/html launching etc code by Stephan Ball
+            Code found at  
+            https://delphiaball.co.uk/2018/08/03/opening-a-pdf-on-android-with-delphi/
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="%package%.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
 <%application-meta-data%>
 <%uses-libraries%>
         <!-- Trigger Google Play services to install the backported photo picker module. -->
