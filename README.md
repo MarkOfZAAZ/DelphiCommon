@@ -359,7 +359,8 @@ interface
 uses
   System.SysUtils, System.Classes, System.Types, System.UITypes, System.Threading,
   {$IF Defined(MSWINDOWS)}
-    Winapi.ShellAPI, Winapi.Windows,
+    Winapi.ShellAPI,
+    Winapi.Windows,
   {$ENDIF}
   {$IF Defined(ANDROID)}
     Androidapi.JNI.GraphicsContentViewText, Androidapi.JNI.Net, Androidapi.JNI.JavaTypes,
@@ -379,6 +380,25 @@ implementation
 uses
   System.IOUtils;
 
+{
+  ✅ FullyQualifiedFilename
+
+  Returns a fully qualified path for a given filename, resolving platform‑specific
+  storage locations when the input is not already rooted.
+
+  - If AFilename is already an absolute path, it is returned unchanged.
+  - On Android:
+        • Uses the app’s CachePath so the file can be shared via FileProvider.
+        • Ensures all externally launched files (PDF/HTML/etc.) live in a
+          predictable, provider‑accessible location.
+  - On Windows:
+        • Stores files under:  <Documents>\<ExeName>\
+        • Creates the directory if needed.
+        • Keeps app-generated files grouped under a per-application folder.
+
+  This function guarantees a safe, valid, platform‑appropriate location for
+  temporary or generated files.
+}
 function FullyQualifiedFilename(const AFilename: string): string;
 begin
   // Already fully qualified?
@@ -394,6 +414,26 @@ begin
   {$ENDIF}
 end;
 
+{
+  ✅ LaunchExternalFile
+
+  Opens an external file (PDF, HTML, etc.) using the platform’s native handler.
+
+  - Validates the filename and ensures the file exists before attempting launch.
+  - On Windows, delegates directly to ShellExecute to open the file with the
+    system-associated application.
+  - On Android, uses a FileProvider-backed content URI so the target app can
+    safely read the file:
+        • Builds a content:// URI via getUriForFile using "<package>.provider".
+        • Creates an ACTION_VIEW intent and assigns the correct MIME type
+          (currently detects .pdf vs .html).
+        • Grants temporary read permission and prevents the viewer from
+          appearing in the activity history.
+        • Starts the external viewer via the main Activity.
+
+  This routine abstracts away platform differences and ensures secure,
+  FileProvider-compliant file launching on Android.
+}
 procedure LaunchExternalFile(const AFilename: String);
 {$IF Defined(Android)}
 var
@@ -403,7 +443,6 @@ var
   Authority: JString;
 {$ENDIF}
 begin
-  // We are only looking for .pdf and .html file extensions
   if AFilename.IsEmpty then
     Exit;
   if not FileExists(AFilename) then
@@ -428,6 +467,8 @@ begin
 end;
 
 {
+  ✅ ShowReportAsync
+
   Runs a long-running report generation task asynchronously while optionally
   displaying a progress animation.
 
