@@ -349,6 +349,139 @@ begin
   {$ENDIF}
 end;
 ```
+### A fully working Delphi unit to launch the external file providers
+```delphi
+
+unit uExternalFileLauncher;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, System.Types, System.UITypes, System.Threading,
+  {$IF Defined(MSWINDOWS)}
+    Winapi.ShellAPI, Winapi.Windows,
+  {$ENDIF}
+  {$IF Defined(ANDROID)}
+    Androidapi.JNI.GraphicsContentViewText, Androidapi.JNI.Net, Androidapi.JNI.JavaTypes,
+    Androidapi.JNI.Support, Androidapi.Helpers, Androidapi.JNI.App,
+  {$ENDIF}
+  FMX.StdCtrls, FMX.Objects;
+
+// use an anonymous method (closure) to pass the creation logic as a parameter.
+type
+  TCreateReportFunc = reference to function(out FileName: string): Boolean;
+  procedure ShowReportAsync(const AProgressAni: TAniIndicator; const AProgressRect: TRectangle; const ACreateReport: TCreateReportFunc);
+  procedure LaunchExternalFile(const AFilename: String);
+  function FullyQualifiedFilename(const AFilename: string): string;
+
+implementation
+
+uses
+  System.IOUtils;
+
+function FullyQualifiedFilename(const AFilename: string): string;
+begin
+  // Already fully qualified?
+  if TPath.IsPathRooted(AFilename) then
+    Exit(AFilename);
+  {$IF DEFINED(Android)}
+    // NOTE: Using GetCachePath in android, for FileProvider sharing
+    Result := TPath.Combine(TPath.GetCachePath, AFilename);
+  {$ELSEIF DEFINED(MSWINDOWS)}
+    var SavePath := TPath.Combine(TPath.GetDocumentsPath, TPath.GetFileNameWithoutExtension(ParamStr(0)));
+    ForceDirectories(SavePath);
+    Result := TPath.Combine(SavePath, AFilename);
+  {$ENDIF}
+end;
+
+procedure LaunchExternalFile(const AFilename: String);
+{$IF Defined(Android)}
+var
+  Intent: JIntent;
+  FileObj: JFile;
+  Uri: Jnet_Uri;
+  Authority: JString;
+{$ENDIF}
+begin
+  // We are only looking for .pdf and .html file extensions
+  if AFilename.IsEmpty then
+    Exit;
+  if not FileExists(AFilename) then
+    Exit;
+  {$IF Defined(MSWINDOWS)}
+    ShellExecute(0, nil, PChar(AFilename), nil, nil, SW_SHOWNORMAL);
+  {$ENDIF}
+  {$IF Defined(Android)}
+    FileObj := TJFile.JavaClass.init(StringToJString(AFilename));
+    Authority := StringToJString(JStringToString(TAndroidHelper.Context.getPackageName) + '.provider');
+    Uri := TJContent_FileProvider.JavaClass.getUriForFile(TAndroidHelper.Context, Authority, FileObj);
+    Intent := TJIntent.JavaClass.init(TJIntent.JavaClass.ACTION_VIEW);
+    // Note: only checking .pdf or .html at this version
+    if AFilename.ToLower.EndsWith('.pdf') then
+      Intent.setDataAndType(Uri, StringToJString('application/pdf'))
+    else
+      Intent.setDataAndType(Uri, StringToJString('text/html'));
+    Intent.addFlags(TJIntent.JavaClass.FLAG_GRANT_READ_URI_PERMISSION);
+    Intent.addFlags(TJIntent.JavaClass.FLAG_ACTIVITY_NO_HISTORY);
+    TAndroidHelper.Activity.startActivity(Intent);
+  {$ENDIF}
+end;
+
+{
+  Runs a long-running report generation task asynchronously while optionally
+  displaying a progress animation.
+
+  - If AProgressAni or AProgressRect are non‑nil, they are activated before
+    starting the background task.
+  - The report is created inside a TTask.Run worker thread so the UI remains
+    responsive.
+  - Any exception during report creation marks the operation as failed.
+  - UI updates (stopping the animation and launching the report file) are
+    marshalled back to the main thread using TThread.Queue.
+  - If both progress controls are nil, the routine simply runs the task without
+    showing any visual feedback.
+}
+procedure ShowReportAsync(const AProgressAni: TAniIndicator; const AProgressRect: TRectangle; const ACreateReport: TCreateReportFunc);
+begin
+  // Start animation only if controls exist
+  if Assigned(AProgressAni) then
+    AProgressAni.Enabled := True;
+  if Assigned(AProgressRect) then
+    AProgressRect.Visible := True;
+
+  // now run the create and launch in a thread...
+  TTask.Run(
+    procedure
+    var
+      FileName: string;
+      Success: Boolean;
+    begin
+      try
+        Success := ACreateReport(FileName);
+      except
+        Success := False;
+      end;
+      TThread.Queue(nil,
+        procedure
+        begin
+          // Stop animation only if controls exist
+          if Assigned(AProgressAni) then
+            AProgressAni.Enabled := False;
+          if Assigned(AProgressRect) then
+            AProgressRect.Visible := False;
+          // if done, show the report
+          if Success then
+            LaunchExternalFile(FileName);
+        end);
+    end);
+end;
+
+end.
+
+```
+
+
+
 ### Additional notes re permissions
 Make sure permissions including CAMERA, READ_MEDIA_IMAGES, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE are declared (if required) in your project's AndroidManifest.template.xml (You can use the IDE to set them) 
 
