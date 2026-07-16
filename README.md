@@ -359,6 +359,7 @@ If you're targeting API 34, it's also worth adding the Android 14 "partial acces
 
 ## Version History
 * 21/10/2025 **First Checkin**
+* 16/07/2026 **Changes to android permissions**
 
 ## License
 ✅ Do what you want with this, any improvements would be helpfull
