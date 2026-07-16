@@ -90,10 +90,11 @@ end;
 
 
 > [!IMPORTANT]
-> ## Using PROVIDERS to launch external PDF document viewer on Android
-> ### This has been tested under Delphi 12.3 Android64, Windows64
+> ## Using PROVIDERS to launch external PDF / HTML document viewer on Android
+> ### This has been tested under Delphi 12.3 Android64, Windows64 and Delphi 13.1 Android64, Windows64
 
-Recent versions of Android require that providers must be used to launch a external viewer for things like PDF which are not natively supported under Android
+Recent versions of Android require that providers must be used to launch a external viewer for things like PDF / HTML documents which are not natively supported under Android
+
 The following instructions should help you to configure the application manifest so it can use the provider. I spent hours using chatGPT, Copilot, Preplexity etc, and trawling hundreds of delphi documents, but not one showed the steps, the legendary Stephen A Ball has a video how to [@Stephan Ball](https://delphiaball.co.uk/2018/08/03/opening-a-pdf-on-android-with-delphi/) but sometimes simply how to do in writing helps!
 
 > [!IMPORTANT]
@@ -348,7 +349,10 @@ begin
   {$ENDIF}
 end;
 ```
+### Additional notes re permissions
+Make sure permissions including CAMERA, READ_MEDIA_IMAGES, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE are declared (if required) in your project's AndroidManifest.template.xml (You can use the IDE to set them) 
 
+If you're targeting API 34, it's also worth adding the Android 14 "partial access" permission READ_MEDIA_VISUAL_USER_SELECTED  so users who select "select photos" instead of "allow all" still register as having granted something.
 
 ## Authors
 😎 Mark Richards [@MascotZombie](https://thezombiecoders.co.uk)
